@@ -1,0 +1,32 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Add Recipient{% endblock %}
+
+{% block body %}
+    <h1>Add Recipient</h1>
+
+    {% if emailAdded %}
+        <div class="alert alert-success">
+            <p>Added Recipient {{ emailAdded }}</p>
+        </div>
+    {% endif %}
+
+    {% if errorMsg is defined %}
+        <div class="alert alert-danger">
+            <p>{{ errorMsg }}</p>
+        </div>
+    {% endif %}
+
+    {{ form_start(addRecipientForm) }}
+
+    {{ form_errors(addRecipientForm) }}
+
+    <div class="form-group">
+        {{ form_row(addRecipientForm.name) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(addRecipientForm.email) }}
+    </div>
+
+    {{ form_end(addRecipientForm) }}
+{% endblock %}

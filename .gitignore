@@ -1,0 +1,9 @@
+vender/
+composer.lock
+bin/
+default/
+.vagrant/
+var/
+config/parameters.yml
+web/uploads
+puppet/files/dot

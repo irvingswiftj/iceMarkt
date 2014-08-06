@@ -1,0 +1,4 @@
+icemarkt_main:
+    resource: "@IceMarktMainBundle/Controller/"
+    type:     annotation
+    prefix:   /

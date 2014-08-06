@@ -1,0 +1,9 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Mail Recipients{% endblock %}
+
+{% block body %}
+    <h1>Removed Recipient {{ email }}</h1>
+
+    <p><a href="{{ path('view_recipient_list') }}">&laquo; Back to View Recipients</a></p>
+{% endblock %}
