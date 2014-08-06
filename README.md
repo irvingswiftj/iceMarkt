@@ -4,10 +4,10 @@ IceMarkt
 Welcome to IceMarkt, an open source marketing platform built on symfony2
 
 #Requirements
-Vagrant*
-VirtualBox*
 
- * If you want to run in a VirtualMachine
+##To use the virtual machine
+* Vagrant
+* VirtualBox
 
 #Setup
 
