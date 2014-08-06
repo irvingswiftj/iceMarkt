@@ -30,3 +30,13 @@ chmod a+x setupdb.sh
 ./setupdb.sh
 ```
 
+#Testing
+
+Unit tests coming soon
+
+#Credits
+- [irvingswiftj](https://github.com/:irvingswiftj)
+- [All Contributors](https://github.com/irvingswiftj/icemarkt/contributors)
+
+#License
+The BSD License. Please see [License File](https://github.com/irvingswiftj/spotifyLib/blob/master/LICENSE) for more information.
