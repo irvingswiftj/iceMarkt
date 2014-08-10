@@ -8,7 +8,6 @@
 
 namespace IceMarkt\Bundle\MainBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -51,7 +50,7 @@ class EmailProfile
 
     public function __construct()
     {
-        $this->templates = new ArrayCollection();
+        $this->templates = new EmailTemplateCollection();
     }
 
     /**
