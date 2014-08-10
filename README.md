@@ -54,4 +54,4 @@ As I'm currently using NFS to map a shared folder to the virtual machine, it won
 - [All Contributors](https://github.com/irvingswiftj/icemarkt/contributors)
 
 #License
-The BSD License. Please see [License File](https://github.com/irvingswiftj/spotifyLib/blob/master/LICENSE) for more information.
+The BSD License. Please see [License File](https://github.com/irvingswiftj/iceMarkt/blob/master/LICENSE) for more information.
