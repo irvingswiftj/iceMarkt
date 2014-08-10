@@ -36,11 +36,18 @@ class RecipientController extends Controller
         $recipient = $request->request->get('form');
 
         $form = $this->createFormBuilder()
-            ->add('name', 'text', array(
+            ->add('first_name', 'text', array(
                 'attr' => array(
                     'class' => 'form-control',
-                    'value' => (is_array($recipient) && array_key_exists('name', $recipient))
-                            ? $recipient['name'] : ''
+                    'value' => (is_array($recipient) && array_key_exists('first_name', $recipient))
+                            ? $recipient['first_name'] : ''
+                )
+            ))
+            ->add('last_name', 'text', array(
+                'attr' => array(
+                    'class' => 'form-control',
+                    'value' => (is_array($recipient) && array_key_exists('last_name', $recipient))
+                            ? $recipient['last_name'] : ''
                 )
             ))
             ->add('email', 'email', array(
@@ -69,7 +76,8 @@ class RecipientController extends Controller
             if ($existingRecipient === null) {
 
                 $newRecipient = new MailRecipient();
-                $newRecipient->setName($recipient['name']);
+                $newRecipient->setFirstName($recipient['first_name']);
+                $newRecipient->setLastName($recipient['last_name']);
                 $newRecipient->setEmailAddress($recipient['email']);
 
                 $em->persist($newRecipient);
@@ -190,7 +198,7 @@ class RecipientController extends Controller
             )
         );
 
-        $em->remove($recipient);
+        $recipient->disable();
         $em->flush();
 
         $this->varsForTwig['email'] = $email;

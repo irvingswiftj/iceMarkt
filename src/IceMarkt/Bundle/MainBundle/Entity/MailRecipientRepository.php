@@ -17,4 +17,25 @@ class MailRecipientRepository extends EntityRepository
     {
 
     }
+
+
+    /**
+     * Overriding the default find all so that disable MailRecipients are excluded
+     *
+     * @param array|null $orderBy
+     * @param Integer|null $limit
+     * @param Integer|null $offset
+     * @return array
+     */
+    public function findAll($orderBy = null, $limit = null, $offset = null)
+    {
+        return $this->findBy(
+            array(
+                'enabled' => true
+            ),
+            $orderBy,
+            $limit,
+            $offset
+        );
+    }
 }

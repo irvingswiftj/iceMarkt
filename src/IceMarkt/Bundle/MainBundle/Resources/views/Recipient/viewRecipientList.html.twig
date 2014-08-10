@@ -10,14 +10,16 @@
             <thead>
                 <tr>
                     <td>Email</td>
-                    <td>Name</td>
+                    <td>Last Name</td>
+                    <td>First Name</td>
                 </tr>
             </thead>
             <tbody>
                 {% for recipient in recipients %}
                 <tr>
                     <td>{{ recipient.emailAddress }}</td>
-                    <td>{{ recipient.name }}</td>
+                    <td>{{ recipient.lastName }}</td>
+                    <td>{{ recipient.firstName }}</td>
                     <td><a href="{{ path('remove_recipient', {'email' : recipient.emailAddress}) }}">Delete</a></td>
                 </tr>
                 {%  endfor %}

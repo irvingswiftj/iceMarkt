@@ -22,7 +22,10 @@
     {{ form_errors(addRecipientForm) }}
 
     <div class="form-group">
-        {{ form_row(addRecipientForm.name) }}
+        {{ form_row(addRecipientForm.first_name) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(addRecipientForm.last_name) }}
     </div>
     <div class="form-group">
         {{ form_row(addRecipientForm.email) }}
