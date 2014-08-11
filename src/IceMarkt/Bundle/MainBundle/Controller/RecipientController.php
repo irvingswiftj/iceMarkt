@@ -15,6 +15,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+/**
+ * Class RecipientController
+ * @package IceMarkt\Bundle\MainBundle\Controller
+ */
 class RecipientController extends Controller
 {
     private $varsForTwig = array();
@@ -180,7 +184,6 @@ class RecipientController extends Controller
     /**
      * Controller Action for removing a recipient
      *      recipient is remove by primary key which is the email address
-     *      //TODO consider instead of delete, marking the row disabled
      *
      * @Route("/recipient/remove/{email}/", name="remove_recipient")
      * @Template()

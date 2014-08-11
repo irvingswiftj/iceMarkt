@@ -7,6 +7,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+/**
+ * Class DefaultController
+ * @package IceMarkt\Bundle\MainBundle\Controller
+ */
 class DefaultController extends Controller
 {
     /**

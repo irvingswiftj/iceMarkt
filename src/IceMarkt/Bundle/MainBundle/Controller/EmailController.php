@@ -13,6 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+/**
+ * Class EmailController
+ * @package IceMarkt\Bundle\MainBundle\Controller
+ */
 class EmailController extends Controller
 {
 

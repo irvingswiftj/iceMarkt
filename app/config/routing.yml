@@ -2,3 +2,7 @@ icemarkt_main:
     resource: "@IceMarktMainBundle/Controller/"
     type:     annotation
     prefix:   /
+icemarkt_public:
+    resource: "@IceMarktPublicBundle/Controller/"
+    type:     annotation
+    prefix:   /

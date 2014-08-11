@@ -12,6 +12,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+/**
+ * Class MarketingController
+ * @package IceMarkt\Bundle\MainBundle\Controller
+ */
 class MarketingController extends Controller
 {
 
