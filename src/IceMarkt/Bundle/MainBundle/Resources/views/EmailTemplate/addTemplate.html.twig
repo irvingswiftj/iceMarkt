@@ -1,0 +1,41 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Add Email Template{% endblock %}
+
+{% block body %}
+    <h1>Add Email Template</h1>
+
+    {% if emailTemplateAdded %}
+        <div class="alert alert-success">
+            <p>Added Template: {{ emailTemplateAdded }}</p>
+        </div>
+    {% endif %}
+
+    {% if errorMsg is defined %}
+        <div class="alert alert-danger">
+            <p>{{ errorMsg }}</p>
+        </div>
+    {% endif %}
+
+    {{ form_start(addTemplateForm) }}
+
+    {{ form_errors(addTemplateForm) }}
+
+    <div class="form-group">
+        {{ form_row(addTemplateForm.name) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(addTemplateForm.email_profile_id) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(addTemplateForm.subject) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(addTemplateForm.template) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(addTemplateForm.format) }}
+    </div>
+
+    {{ form_end(addTemplateForm) }}
+{% endblock %}

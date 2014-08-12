@@ -30,9 +30,15 @@
                             </li>
                         </ul>
                     </li>
-                    <li {# if CurrentRoute == path('marketing_setup') #}{#class="active"#}{# endif #}>
-                        <a href="{# path('marketing_setup') #}">Emails</a>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Email Templates <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li {% if CurrentRoute == path('add_email_template') %}class="active"{% endif %}>
+                                <a href="{{ path('add_email_template') }}">Add Email Template</a>
+                            </li>
+                        </ul>
                     </li>
+
                     </li>
                     <li {% if CurrentRoute == path('marketing_setup') %}class="active"{% endif %}>
                         <a href="{{ path('marketing_setup') }}">Marketing Setup</a>

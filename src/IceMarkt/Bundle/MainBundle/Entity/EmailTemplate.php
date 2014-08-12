@@ -16,6 +16,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EmailTemplate
 {
+    const PLAIN_HEADER = 0;
+
+    const HTML_HEADER = 1;
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
