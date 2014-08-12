@@ -116,4 +116,27 @@ class EmailTemplateController extends Controller
 
         return $this->varsForTwig;
     }
+
+    /**
+     * Controller action for the page of listing email templates
+     *
+     * @Route("/emailTemplate/list/",
+     *          name="view_email_template_list")
+     * @Route("/emailTemplate/list/{pageNumber}/",
+     *          name="view_email_template_list_page")
+     *          defaults={"pageNumber":"1"}
+     * @Template()
+     *
+     * @param Integer $pageNumber - for pagination
+     * @return array
+     */
+    public function viewEmailTemplateListAction($pageNumber = 1)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        //TODO add support for pagination
+        $this->varsForTwig['emailTemplates'] = $em->getRepository('IceMarktMainBundle:EmailTemplate')->findAll();
+
+        return $this->varsForTwig;
+    }
 }
