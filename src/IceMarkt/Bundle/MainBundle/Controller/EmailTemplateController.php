@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class EmailTemplateController
@@ -138,5 +139,38 @@ class EmailTemplateController extends Controller
         $this->varsForTwig['emailTemplates'] = $em->getRepository('IceMarktMainBundle:EmailTemplate')->findAll();
 
         return $this->varsForTwig;
+    }
+
+    /**
+     * Controller Action for previewing a template
+     * //TODO handle invalid id
+     *
+     * @Route("/emailTemplate/preview/{id}/",
+     *          name="view_email_template_preview")
+     *
+     * @param Integer $id - id of the template
+     * @return Response
+     */
+    public function previewAction($id)
+    {
+        $et = $this->getDoctrine()->getManager();
+
+        $template = $et->getRepository('IceMarktMainBundle:EmailTemplate')->findOneBy(
+            array(
+                'id' => $id
+            )
+        );
+
+        $twig = new \Twig_Environment(new \Twig_Loader_String());
+
+        $response = $twig->render(
+            $template->getTemplate(),
+            array(
+                'first_name'    => 'FIRSTNAME',
+                'last_name'     => 'LASTNAME'
+            )
+        );
+
+        return new Response($response);
     }
 }
