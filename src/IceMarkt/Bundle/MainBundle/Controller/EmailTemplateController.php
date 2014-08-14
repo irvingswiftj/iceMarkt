@@ -124,7 +124,6 @@ class EmailTemplateController extends Controller
      * @Route(
      *      "/emailTemplate/edit/{id}",
      *      name="edit_template",
-     *
      * )
      * @Template()
      *

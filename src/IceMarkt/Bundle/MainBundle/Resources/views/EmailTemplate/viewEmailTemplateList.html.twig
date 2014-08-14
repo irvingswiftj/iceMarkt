@@ -19,7 +19,10 @@
                 <tr>
                     <td>{{ emailTemplate.name}}</td>
                     <td>{{ emailTemplate.subject }}</td>
-                    <td><a href="{{ path('view_email_template_preview',{'id': emailTemplate.id}) }}" target="_blank">Preview</a></td>
+                    <td>
+                        <a href="{{ path('edit_template',{'id': emailTemplate.id}) }}" target="_blank">Edit</a> |
+                        <a href="{{ path('view_email_template_preview',{'id': emailTemplate.id}) }}" target="_blank">Preview</a>
+                    </td>
                 </tr>
                 {%  endfor %}
             </tbody>
