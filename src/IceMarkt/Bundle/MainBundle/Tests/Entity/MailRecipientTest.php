@@ -10,7 +10,8 @@ namespace IceMarkt\Bundle\MainBundle\Tests\Entity;
 
 use IceMarkt\Bundle\MainBundle\Entity\MailRecipient;
 
-class MailRecipientTest extends \PHPUnit_Framework_TestCase {
+class MailRecipientTest extends \PHPUnit_Framework_TestCase
+{
 
     /**
      * @test
