@@ -119,6 +119,105 @@ class EmailTemplateController extends Controller
     }
 
     /**
+     * controller method for the edit email template page
+     *
+     * @Route(
+     *      "/emailTemplate/edit/{id}",
+     *      name="edit_template",
+     *
+     * )
+     * @Template()
+     *
+     *
+     * TODO add editing email profile id
+     * @param Request $request
+     * @param $id
+     *
+     * @return array
+     */
+    public function editTemplateAction(Request $request, $id)
+    {
+        $this->varsForTwig['emailTemplateEdited'] = false;
+
+        $et = $this->getDoctrine()->getManager();
+
+        $template = $et->getRepository('IceMarktMainBundle:EmailTemplate')->findOneBy(
+            array(
+                'id' => $id
+            )
+        );
+
+        $templateChanges = $request->request->get('form');
+
+        $form = $this->createFormBuilder()
+            ->add('name', 'text', array(
+                'attr' => array(
+                    'placeholder' => 'Name',
+                    'class' => 'form-control',
+                    'value' => is_array($templateChanges) ? $templateChanges['name'] : $template->getName()
+                )
+            ))
+            ->add('email_profile_id', 'text', array(
+                'attr' => array(
+                    'placeholder' => 'Coming Soon',
+                    'disabled' => 'disabled',
+                    'class' => 'form-control',
+                    'value' => ''
+                )
+            ))
+            ->add('subject', 'text', array(
+                'attr' => array(
+                    'placeholder' => 'Subject',
+                    'class' => 'form-control',
+                    'value' => is_array($templateChanges) ? $templateChanges['subject'] : $template->getSubject()
+                )
+            ))
+            ->add('template', 'textarea', array(
+                'data' => is_array($templateChanges) ? $templateChanges['template'] : $template->getTemplate(),
+                'attr' => array(
+                    'placeholder' => 'Template',
+                    'class' => 'form-control',
+                )
+            ))
+            ->add('format', 'choice', array(
+                'choices' => array(
+                    EmailTemplate::PLAIN_HEADER => 'Plain',
+                    EmailTemplate::HTML_HEADER => 'HTML'
+                ),
+                'preferred_choices' => is_array($templateChanges)
+                        ? array($templateChanges['format']) : array($template->getFormat()),
+                'attr' => array(
+                    'class' => 'form-control'
+                )
+            ))
+            ->add('Save', 'submit', array(
+                'attr'   =>  array(
+                    'class'   => 'btn btn-primary')
+            ))
+            ->getForm();
+
+        $this->varsForTwig['addTemplateForm'] = $form->createView();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            $template->setName($templateChanges['name']);
+            $template->setSubject($templateChanges['subject']);
+            $template->setFormat($templateChanges['format']);
+            $template->setTemplate($templateChanges['template']);
+
+            $et->persist($template);
+            $et->flush();
+
+            $this->varsForTwig['emailTemplateEdited'] = $template->getName();
+
+        }
+
+        return $this->varsForTwig;
+    }
+
+    /**
      * Controller action for the page of listing email templates
      *
      * @Route("/emailTemplate/list/",
