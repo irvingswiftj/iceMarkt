@@ -20,8 +20,14 @@ class MailRecipient
 {
 
     /**
+     * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\Column(type="string", length=100)
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=100, unique=true, nullable=false)
      */
     private $emailAddress;
 
@@ -180,5 +186,25 @@ class MailRecipient
     public function getCreatedDt()
     {
         return $this->createdDt;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Get the full name for this recipient
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName();
     }
 }

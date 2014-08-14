@@ -14,7 +14,7 @@ class MailRecipientTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @test
+     * @test that all setter return $this and the getters have expected values
      */
     public function settersAndGetters()
     {
@@ -46,7 +46,7 @@ class MailRecipientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
+     * @test for enabling and disabling a MailRecipient
      */
     public function enablingAndDisabling()
     {
@@ -57,5 +57,17 @@ class MailRecipientTest extends \PHPUnit_Framework_TestCase
 
         $mailRecipient->enable();
         $this->assertTrue($mailRecipient->getEnabled());
+    }
+
+    /**
+     * @test for getting the full name of the recipient
+     */
+    public function gettingFullName()
+    {
+        $recipient = new MailRecipient();
+        $recipient->setFirstName('Fred');
+        $recipient->setLastName('Flinstone');
+
+        $this->assertEquals('Fred Flinstone', $recipient->getName());
     }
 }

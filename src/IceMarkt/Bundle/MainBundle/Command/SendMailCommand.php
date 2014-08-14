@@ -17,7 +17,12 @@ class SendMailCommand extends ContainerAwareCommand
     {
         $this
             ->setName('Main:SendMail')
-            ->setDescription('Send Mail from CSV files');
+            ->setDescription('Send Mail from CSV files')
+            ->addArgument(
+                'emailTemplateId',
+                InputArgument::REQUIRED,
+                'Which email template do you want to send'
+            );
     }
 
     /**
@@ -28,23 +33,29 @@ class SendMailCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        //TODO get email type (for the subject from address etc)
+        //TODO get email profile
 
-        $doctrine   = $this->getContainer()->get('doctrine');
-        $repository = $doctrine->getRepository('IceMarktMainBundle:MailRecipient');
-        $recipients = $repository->findAll();
+        $doctrine                   = $this->getContainer()->get('doctrine');
+        $mailRecipientRepository    = $doctrine->getRepository('IceMarktMainBundle:MailRecipient');
+        $emailTemplateRepository    = $doctrine->getRepository('IceMarktMainBundle:EmailTemplate');
+        $emailTemplate              = $emailTemplateRepository->findOneBy(array(
+            'id' => $input->getArgument('emailTemplateId')
+        ));
+        $recipients                 = $mailRecipientRepository->findAll();
 
         foreach ($recipients as $recipient) {
 
-            $body = $this->getContainer()->get('templating')->render(
-                'IceMarktMainBundle:Email:email.html.twig',
+            $twig = new \Twig_Environment(new \Twig_Loader_String());
+
+            $body = $twig->render(
+                $emailTemplate->getTemplate(),
                 array(
-                    'name'  => $recipient->getName()
+                    'first_name'  => $recipient->getFirstName()
                 )
             );
 
             $message = \Swift_Message::newInstance()
-                ->setSubject('Hello Email')
+                ->setSubject($emailTemplate->getSubject())
                 ->setFrom('test@test.com')
                 ->setTo($recipient->getEmailAddress())
                 ->setBody($body)
