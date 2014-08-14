@@ -71,7 +71,7 @@ class EmailProfile
 
     /**
      * @param String $fromName
-     * @return $this;
+     * @return $this
      */
     public function setFromName($fromName)
     {
@@ -98,7 +98,7 @@ class EmailProfile
 
     /**
      * @param String $replyToEmail
-     * @return $this;
+     * @return $this
      */
     public function setReplyToEmail($replyToEmail)
     {

@@ -9,7 +9,6 @@
 namespace IceMarkt\Bundle\MainBundle\Tests\Entity;
 
 use IceMarkt\Bundle\MainBundle\Entity\EmailTemplate;
-use Symfony\Component\Validator\Constraints\Email;
 
 class EmailTemplateTest extends \PHPUnit_Framework_TestCase
 {

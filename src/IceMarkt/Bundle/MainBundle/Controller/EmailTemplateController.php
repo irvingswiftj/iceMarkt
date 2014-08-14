@@ -240,6 +240,35 @@ class EmailTemplateController extends Controller
     }
 
     /**
+     * controller method for deleting an email template
+     *
+     * @Route(
+     *      "/emailTemplate/delete/{id}",
+     *      name="delete_template",
+     * )
+     *
+     *
+     * @param $id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteEmailTemplateAction($id)
+    {
+        $et = $this->getDoctrine()->getManager();
+
+        $template = $et->getRepository('IceMarktMainBundle:EmailTemplate')->findOneBy(
+            array(
+                'id' => $id
+            )
+        );
+
+        $et->remove($template);
+        $et->flush();
+
+        return $this->redirect($this->generateUrl('view_email_template_list'));
+    }
+
+    /**
      * Controller Action for previewing a template
      * //TODO handle invalid id
      *
