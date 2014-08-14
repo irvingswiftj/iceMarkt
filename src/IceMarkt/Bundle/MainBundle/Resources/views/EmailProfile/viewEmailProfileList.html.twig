@@ -12,6 +12,7 @@
                     <tr>
                         <th>From Name</th>
                         <th>From Email</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -19,6 +20,9 @@
                     <tr>
                         <td>{{ emailProfile.fromName}}</td>
                         <td>{{ emailProfile.fromEmail }}</td>
+                        <td>
+                            <a href="{{ path('delete_email_profile',{'id': emailProfile.id}) }}">Delete</a>
+                        </td>
                     </tr>
                     {%  endfor %}
                 </tbody>
