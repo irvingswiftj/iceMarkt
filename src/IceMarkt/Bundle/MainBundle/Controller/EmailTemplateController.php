@@ -8,7 +8,9 @@
 
 namespace IceMarkt\Bundle\MainBundle\Controller;
 
+use IceMarkt\Bundle\MainBundle\Entity\EmailProfile;
 use IceMarkt\Bundle\MainBundle\Entity\EmailTemplate;
+use IceMarkt\Bundle\MainBundle\Entity\EmailProfileRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -41,7 +43,9 @@ class EmailTemplateController extends Controller
     {
         $this->varsForTwig['emailTemplateAdded'] = false;
 
-        $template = $request->request->get('form');
+
+        $em         = $this->getDoctrine()->getManager();
+        $template   = $request->request->get('form');
 
         $form = $this->createFormBuilder()
             ->add('name', 'text', array(
@@ -52,13 +56,11 @@ class EmailTemplateController extends Controller
                             ? $template['name'] : ''
                 )
             ))
-            ->add('email_profile_id', 'text', array(
+            ->add('email_profile_id', 'choice', array(
+                'choices' => $em->getRepository('IceMarktMainBundle:EmailProfile')->getChoicesArray(),
+                'preferred_choices' => array(),
                 'attr' => array(
-                    'placeholder' => 'Coming Soon',
-                    'disabled' => 'disabled',
-                    'class' => 'form-control',
-                    'value' => (is_array($template) && array_key_exists('email_profile_id', $template))
-                            ? $template['email_profile_id'] : ''
+                    'class' => 'form-control'
                 )
             ))
             ->add('subject', 'text', array(
@@ -70,12 +72,12 @@ class EmailTemplateController extends Controller
                 )
             ))
             ->add('template', 'textarea', array(
-                    'attr' => array(
-                        'placeholder' => 'Template',
-                        'class' => 'form-control',
-                        'value' => (is_array($template) && array_key_exists('template', $template))
-                                ? $template['template'] : ''
-                    )
+                'data' => (is_array($template) && array_key_exists('template', $template))
+                    ? $template['template'] : '',
+                'attr' => array(
+                    'placeholder' => 'Template',
+                    'class' => 'form-control'
+                )
             ))
             ->add('format', 'choice', array(
                 'choices' => array(
@@ -100,9 +102,18 @@ class EmailTemplateController extends Controller
 
         if ($form->isValid()) {
 
-            $em = $this->getDoctrine()->getManager();
-
             $newTemplate = new EmailTemplate();
+
+            $emailProfile = $em->getRepository('IceMarktMainBundle:EmailProfile')->findOneBy(
+                array(
+                    'id' => $template['email_profile_id']
+                )
+            );
+
+            if ($emailProfile instanceof EmailProfile) {
+                $newTemplate->setEmailProfile($emailProfile);
+            }
+
             $newTemplate->setName($template['name']);
             $newTemplate->setSubject($template['subject']);
             $newTemplate->setFormat($template['format']);
@@ -127,8 +138,6 @@ class EmailTemplateController extends Controller
      * )
      * @Template()
      *
-     *
-     * TODO add editing email profile id
      * @param Request $request
      * @param $id
      *
@@ -156,10 +165,12 @@ class EmailTemplateController extends Controller
                     'value' => is_array($templateChanges) ? $templateChanges['name'] : $template->getName()
                 )
             ))
-            ->add('email_profile_id', 'text', array(
+            ->add('email_profile_id', 'choice', array(
+                'label' => 'Email Profile',
+                'choices' => $et->getRepository('IceMarktMainBundle:EmailProfile')->getChoicesArray(),
+                'preferred_choices' => is_array($templateChanges)
+                        ? array($templateChanges['email_profile_id']) : array($template->getEmailProfile()->getId()),
                 'attr' => array(
-                    'placeholder' => 'Coming Soon',
-                    'disabled' => 'disabled',
                     'class' => 'form-control',
                     'value' => ''
                 )
@@ -200,6 +211,16 @@ class EmailTemplateController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+
+            $emailProfile = $et->getRepository('IceMarktMainBundle:EmailProfile')->findOneBy(
+                array(
+                    'id' => $templateChanges['email_profile_id']
+                )
+            );
+
+            if ($emailProfile instanceof EmailProfile) {
+                $template->setEmailProfile($emailProfile);
+            }
 
             $template->setName($templateChanges['name']);
             $template->setSubject($templateChanges['subject']);

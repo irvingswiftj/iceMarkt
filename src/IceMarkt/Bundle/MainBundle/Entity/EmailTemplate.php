@@ -54,7 +54,7 @@ class EmailTemplate
 
     /**
      * @param mixed $format
-     * @return $this;
+     * @return $this
      */
     public function setFormat($format)
     {
@@ -73,7 +73,7 @@ class EmailTemplate
 
     /**
      * @param mixed $id
-     * @return $this;
+     * @return $this
      */
     public function setId($id)
     {
@@ -111,7 +111,7 @@ class EmailTemplate
 
     /**
      * @param mixed $subject
-     * @return $this;
+     * @return $this
      */
     public function setSubject($subject)
     {
@@ -130,7 +130,7 @@ class EmailTemplate
 
     /**
      * @param mixed $template
-     * @return $this;
+     * @return $this
      */
     public function setTemplate($template)
     {
@@ -145,5 +145,21 @@ class EmailTemplate
     public function getTemplate()
     {
         return $this->template;
+    }
+
+    /**
+     * @param EmailProfile $emailProfile
+     */
+    public function setEmailProfile(EmailProfile $emailProfile)
+    {
+        $this->emailProfile = $emailProfile;
+    }
+
+    /**
+     * @return EmailProfile
+     */
+    public function getEmailProfile()
+    {
+        return $this->emailProfile;
     }
 }
