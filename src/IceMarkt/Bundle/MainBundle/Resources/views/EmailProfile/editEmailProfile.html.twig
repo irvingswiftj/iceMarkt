@@ -1,13 +1,13 @@
 {% extends '::base.html.twig' %}
 
-{% block title %}Add Email Profile{% endblock %}
+{% block title %}Edit Email Profile{% endblock %}
 
 {% block body %}
     <h1>Add Email Profile</h1>
 
-    {% if emailProfileAdded %}
+    {% if emailProfileEdited %}
         <div class="alert alert-success">
-            <p>Added Profile: {{ emailProfileAdded }}</p>
+            <p>Edited Profile: {{ emailProfileEdited }}</p>
         </div>
     {% endif %}
 
@@ -17,24 +17,24 @@
         </div>
     {% endif %}
 
-    {{ form_start(addProfileForm) }}
+    {{ form_start(editProfileForm) }}
 
-    {{ form_errors(addProfileForm) }}
+    {{ form_errors(editProfileForm) }}
 
     <div class="form-group">
-        {{ form_row(addProfileForm.name) }}
+        {{ form_row(editProfileForm.name) }}
     </div>
     <div class="form-group">
-        {{ form_row(addProfileForm.fromName) }}
+        {{ form_row(editProfileForm.fromName) }}
     </div>
     <div class="form-group">
-        {{ form_row(addProfileForm.fromEmail) }}
+        {{ form_row(editProfileForm.fromEmail) }}
     </div>
     <div class="form-group">
-        {{ form_row(addProfileForm.replyToName) }}
+        {{ form_row(editProfileForm.replyToName) }}
     </div>
     <div class="form-group">
-        {{ form_row(addProfileForm.replyToEmail) }}
+        {{ form_row(editProfileForm.replyToEmail) }}
     </div>
-    {{ form_end(addProfileForm) }}
+    {{ form_end(editProfileForm) }}
 {% endblock %}

@@ -44,6 +44,16 @@ class EmailProfileController extends Controller
         $profile = $request->request->get('form');
 
         $form = $this->createFormBuilder()
+            ->add('name', 'text', array(
+                'label' =>'Name for profile',
+                'attr' => array(
+                    'placeholder' => 'Name',
+                    'required' => 'required',
+                    'class' => 'form-control',
+                    'value' => (is_array($profile) && array_key_exists('name', $profile))
+                            ? $profile['name'] : ''
+                )
+            ))
             ->add('fromName', 'text', array(
                 'label' =>'From Name',
                 'attr' => array(
@@ -63,7 +73,7 @@ class EmailProfileController extends Controller
                 )
             ))
             ->add('replyToName', 'text', array(
-                'label' =>'ReplyTo Email',
+                'label' =>'ReplyTo Name',
                 'attr' => array(
                     'placeholder' => 'ReplyTo Name',
                     'class' => 'form-control',
@@ -74,6 +84,7 @@ class EmailProfileController extends Controller
             ->add('replyToEmail', 'text', array(
                 'label' =>'ReplyTo Email',
                 'attr' => array(
+                    'placeholder' => 'ReplyTo Email',
                     'class' => 'form-control',
                     'value' => (is_array($profile) && array_key_exists('replyToEmail', $profile))
                             ? $profile['replyToEmail'] : ''
@@ -94,10 +105,15 @@ class EmailProfileController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $newProfile = new EmailProfile();
+            $newProfile->setName($profile['name']);
             $newProfile->setFromName($profile['fromName']);
             $newProfile->setFromEmail($profile['fromEmail']);
-            $newProfile->setReplyToName($profile['replyToEmail']);
-            $newProfile->setReplyToEmail($profile['replyToEmail']);
+            $newProfile->setReplyToName(
+                empty($profile['replyToName']) ? $profile['fromName'] : $profile['replyToName']
+            );
+            $newProfile->setReplyToEmail(
+                empty($profile['replyToEmail']) ? $profile['fromEmail'] : $profile['replyToEmail']
+            );
 
             $em->persist($newProfile);
             $em->flush();
@@ -123,9 +139,90 @@ class EmailProfileController extends Controller
      *
      * @return array
      */
-    public function editProfileAction(Request $request, $id)
+    public function editEmailProfileAction(Request $request, $id)
     {
+        $this->varsForTwig['emailProfileEdited'] = false;
 
+        $et = $this->getDoctrine()->getManager();
+
+        $emailProfile = $et->getRepository('IceMarktMainBundle:EmailProfile')->findOneBy(
+            array(
+                'id' => $id
+            )
+        );
+
+        $profile = $request->request->get('form');
+
+        $form = $this->createFormBuilder()
+            ->add('name', 'text', array(
+                'label' =>'Name for profile',
+                'attr' => array(
+                    'placeholder' => 'Name',
+                    'required' => 'required',
+                    'class' => 'form-control',
+                    'value' => empty($profile) ? $emailProfile->getName() : $profile['name']
+                )
+            ))
+            ->add('fromName', 'text', array(
+                'label' =>'From Name',
+                'required' => 'required',
+                'attr' => array(
+                    'placeholder' => 'From Name',
+                    'class' => 'form-control',
+                    'value' => empty($profile) ? $emailProfile->getFromName() : $profile['fromName']
+                )
+            ))
+            ->add('fromEmail', 'text', array(
+                'label' =>'From Email',
+                'attr' => array(
+                    'placeholder' => 'From Email Address',
+                    'required' => 'required',
+                    'class' => 'form-control',
+                    'value' => empty($profile) ? $emailProfile->getFromEmail() : $profile['fromEmail']
+                )
+            ))
+            ->add('replyToName', 'text', array(
+                'label' =>'ReplyTo Email',
+                'attr' => array(
+                    'placeholder' => 'ReplyTo Name',
+                    'class' => 'form-control',
+                    'value' => empty($profile) ? $emailProfile->getReplyToName() : $profile['replyToName']
+                )
+            ))
+            ->add('replyToEmail', 'text', array(
+                'label' =>'ReplyTo Email',
+                'attr' => array(
+                    'class' => 'form-control',
+                    'value' => empty($profile) ? $emailProfile->getReplyToEmail() : $profile['replyToEmail']
+                )
+            ))
+            ->add('Add', 'submit', array(
+                'attr'   =>  array(
+                    'class'   => 'btn btn-primary')
+            ))
+            ->getForm();
+
+        $this->varsForTwig['editProfileForm'] = $form->createView();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+
+            $emailProfile->setName($profile['name']);
+            $emailProfile->setFromName($profile['fromName']);
+            $emailProfile->setFromEmail($profile['fromEmail']);
+            $emailProfile->setReplyToName($profile['replyToName']);
+            $emailProfile->setReplyToEmail($profile['replyToEmail']);
+            $em->persist($emailProfile);
+            $em->flush();
+
+            $this->varsForTwig['emailProfileEdited'] = $emailProfile->getFromName();
+
+        }
+
+        return $this->varsForTwig;
     }
 
     /**

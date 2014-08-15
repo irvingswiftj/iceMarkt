@@ -26,6 +26,11 @@ class EmailProfile
     /**
      * @ORM\Column(type="text")
      */
+    private $name;
+
+    /**
+     * @ORM\Column(type="text")
+     */
     private $fromEmail;
 
     /**
@@ -54,11 +59,33 @@ class EmailProfile
     }
 
     /**
+     * @param String $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return String
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * @param String $fromEmail
+     * @return $this
      */
     public function setFromEmail($fromEmail)
     {
         $this->fromEmail = $fromEmail;
+
+        return $this;
     }
 
     /**
