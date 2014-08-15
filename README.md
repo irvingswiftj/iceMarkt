@@ -42,7 +42,7 @@ Hopefully it rendered a page!
 
 #Testing
 
-Unit tests coming soon
+Unit tests are limited but they are all passing
 
 #Known Issues
 
