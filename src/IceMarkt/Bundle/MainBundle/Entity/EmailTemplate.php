@@ -11,7 +11,7 @@ namespace IceMarkt\Bundle\MainBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="IceMarkt\Bundle\MainBundle\Entity\EmailTemplateRepository")
  * @ORM\Table(name="email_templates")
  */
 class EmailTemplate

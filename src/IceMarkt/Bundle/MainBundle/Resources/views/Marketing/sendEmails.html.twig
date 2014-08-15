@@ -1,0 +1,17 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Mail Templates{% endblock %}
+
+{% block body %}
+    <h1>Send Emails</h1>
+
+    {{ form_start(sendEmailsForm) }}
+
+    {{ form_errors(sendEmailsForm) }}
+
+    <div class="form-group">
+        {{ form_row(sendEmailsForm.email_template_id) }}
+    </div>
+
+    {{ form_end(sendEmailsForm) }}
+{% endblock %}

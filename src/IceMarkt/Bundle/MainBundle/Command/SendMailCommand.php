@@ -56,7 +56,7 @@ class SendMailCommand extends ContainerAwareCommand
 
             $message = \Swift_Message::newInstance()
                 ->setSubject($emailTemplate->getSubject())
-                ->setFrom('test@test.com')
+                ->setFrom($emailTemplate->getEmailProfile()->getFromEmail())
                 ->setTo($recipient->getEmailAddress())
                 ->setBody($body)
                 ->setContentType("text/html");
