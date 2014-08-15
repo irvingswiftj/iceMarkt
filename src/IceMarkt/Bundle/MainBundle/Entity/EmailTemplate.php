@@ -48,10 +48,9 @@ class EmailTemplate
     private $format;
 
     /**
-     * @ORM\ManyToOne(targetEntity="EmailProfile", inversedBy="EmailTemplate")
-     * @ORM\JoinColumn(name="email_profile_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="IceMarkt\Bundle\MainBundle\Entity\EmailProfile", inversedBy="templates")
      */
-    private $profile;
+    private $emailProfile;
 
     /**
      * @param mixed $format

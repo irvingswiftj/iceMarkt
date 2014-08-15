@@ -49,7 +49,7 @@ class EmailProfile
     private $replyToName;
 
     /**
-     * @ORM\OneToMany(targetEntity="EmailTemplate", mappedBy="EmailProfile")
+     * @ORM\OneToMany(targetEntity="IceMarkt\Bundle\MainBundle\Entity\EmailTemplate", mappedBy="emailProfile")
      */
     private $templates;
 
