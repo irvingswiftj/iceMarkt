@@ -3,6 +3,8 @@
 {% block title %}Add Email Template{% endblock %}
 
 {% block body %}
+    <script src="//cdn.ckeditor.com/4.4.3/standard/ckeditor.js"></script>
+
     <h1>Add Email Template</h1>
 
     {% if emailTemplateAdded %}
@@ -33,6 +35,11 @@
     <div class="form-group">
         {{ form_row(addTemplateForm.template) }}
     </div>
+    <script>
+        CKEDITOR.replace('form_template', {
+            "height": 600
+        });
+    </script>
     <div class="form-group">
         {{ form_row(addTemplateForm.format) }}
     </div>
