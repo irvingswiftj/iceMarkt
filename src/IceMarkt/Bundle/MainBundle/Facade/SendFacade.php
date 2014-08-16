@@ -65,7 +65,6 @@ class SendFacade
 
         $this->mailer->send($message);
 
-
         return $this;
     }
 }

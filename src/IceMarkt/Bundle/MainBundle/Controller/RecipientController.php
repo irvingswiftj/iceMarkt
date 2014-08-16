@@ -10,6 +10,7 @@ namespace IceMarkt\Bundle\MainBundle\Controller;
 
 
 use IceMarkt\Bundle\MainBundle\Entity\MailRecipient;
+use IceMarkt\Bundle\MainBundle\Entity\SpreadSheet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -110,14 +111,15 @@ class RecipientController extends Controller
      */
     public function bulkAddRecipientAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $spreadsheet = new SpreadSheet();
 
         //start building the form
-        $form = $this->createFormBuilder()
-            ->add('spreadsheet', 'file', array(
+        $form = $this->createFormBuilder($spreadsheet)
+            ->add('file', null, array(
+                'required' => true,
                 'attr' => array(
-                    'class' => 'btn btn-default btn-file'
-                )
+                            'class' => 'btn btn-default btn-file'
+                        )
             ))
             ->add('Upload', 'submit', array(
                 'attr'   =>  array(
@@ -131,28 +133,20 @@ class RecipientController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            //get the file
-            $formFiles = $request->files->get('form');
 
-            $spreadsheet = $formFiles['spreadsheet'];
+            $em = $this->getDoctrine()->getManager();
 
-            $timeUploaded = new \DateTime('UTC');
+            $em->persist($spreadsheet);
+            $em->flush();
 
-            // compute a random name and try to guess the extension (more secure)
-            $extension = $spreadsheet->guessExtension();
-            if (!$extension) {
-                // extension cannot be guessed
-                $extension = 'csv';
-            }
+            print_r($spreadsheet);
 
-            $someNewFilename = 'csv_' . $timeUploaded->format('Ymd.H.i.s') . '.' . $extension;
-
-            //move the file into our uploads dir with a new name
-            $spreadsheet->move('uploads', $someNewFilename);
-
-            // TODO find out which column is what in the spreadsheet
             // TODO insert/update on duplicate each row to the db
+
         }
+
+
+        $this->varsForTwig['formErrors'] = $form->getErrors(true, false);
 
         return $this->varsForTwig;
     }

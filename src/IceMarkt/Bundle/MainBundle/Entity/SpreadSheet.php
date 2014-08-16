@@ -4,6 +4,7 @@ namespace IceMarkt\Bundle\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class SpreadSheet
@@ -29,7 +30,6 @@ class SpreadSheet
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     public $path;
-
 
     /**
      * Spreadsheet file

@@ -65,6 +65,8 @@ class MarketingController extends Controller
             $template   = $request->request->get('form');
             $recipients = $em->getRepository('IceMarktMainBundle:MailRecipient')->findAll();
 
+            //TODO send in batches
+
             foreach ($recipients as $recipient) {
                 $sendFacade->sendTemplateToRecipient($template['email_template_id'], $recipient);
             }
