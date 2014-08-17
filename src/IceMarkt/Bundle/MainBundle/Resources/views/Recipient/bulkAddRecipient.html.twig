@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Bulk Add Recipients</h1>
 
-    {% if formErrors %}
+    {% if formErrors|length > 0 %}
         <div class="alert alert-danger" role="alert">
             {{ formErrors }}
         </div>
