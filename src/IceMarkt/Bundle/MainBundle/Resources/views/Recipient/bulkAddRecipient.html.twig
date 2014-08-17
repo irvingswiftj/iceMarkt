@@ -21,6 +21,9 @@
     {{ form_errors(BulkAddRecipientForm) }}
 
     <div class="form-group">
+        {{ form_row(BulkAddRecipientForm.name) }}
+    </div>
+    <div class="form-group">
         {{ form_row(BulkAddRecipientForm.file) }}
     </div>
     <div class="form-group">

@@ -115,6 +115,14 @@ class RecipientController extends Controller
 
         //start building the form
         $form = $this->createFormBuilder($spreadsheet)
+            ->add('name', 'text', array(
+                'label' => 'Name',
+                'required' => true,
+                'attr' => array(
+                    'placeholder' => 'Name',
+                    'class' => 'form-control',
+                )
+            ))
             ->add('file', null, array(
                 'required' => true,
                 'attr' => array(
@@ -136,12 +144,27 @@ class RecipientController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
+            $spreadsheet->upload();
+
             $em->persist($spreadsheet);
             $em->flush();
 
-            print_r($spreadsheet);
+            if (($handle = fopen($spreadsheet->getWebPath(), "r")) !== false) {
+                while (($data = fgetcsv($handle, 0, ",")) !== false) {
+                    if (filter_var($data[0], FILTER_VALIDATE_EMAIL)) {
+                        $firstName = isset($data[1]) && strlen($data[1] > 0) ? $data[1] : 'na';
+                        $lastName = isset($data[2]) && strlen($data[2] > 0) ? $data[2] : 'na';
 
-            // TODO insert/update on duplicate each row to the db
+                        $mailRecipient = new MailRecipient();
+                        $mailRecipient->setEmailAddress($data[0]);
+                        $mailRecipient->setFirstName($firstName);
+                        $mailRecipient->setLastName($lastName);
+                        $em->persist($mailRecipient);
+                    }
+                }
+                fclose($handle);
+                $em->flush();
+            }
 
         }
 

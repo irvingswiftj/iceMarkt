@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * Class SpreadSheet
  * @package IceMarkt\Bundle\MainBundle\Entity
  * @ORM\Entity
- * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="spreadsheet_uploads")
  */
 class SpreadSheet
@@ -21,25 +20,25 @@ class SpreadSheet
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      */
-    public $name;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    public $path;
+    private $path;
 
     /**
      * Spreadsheet file
      *
      * @Assert\File(
      *     maxSize = "50M",
-     *     mimeTypes = {"text/csv"},
+     *     mimeTypes = {"text/csv", "text/plain"},
      *     maxSizeMessage = "The maximum allowed file size is 50MB.",
      *     mimeTypesMessage = "Only CSV files for now!"
      * )
@@ -54,6 +53,7 @@ class SpreadSheet
     public function setFile(UploadedFile $file = null)
     {
         $this->file = $file;
+        $this->setPath($file->getFilename());
     }
 
     /**
@@ -91,16 +91,15 @@ class SpreadSheet
      */
     protected function getUploadRootDir()
     {
-        // the absolute directory path where uploaded
-        // documents should be saved
-        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
     }
 
+    /**
+     * @return string
+     */
     protected function getUploadDir()
     {
-        // get rid of the __DIR__ so it doesn't screw up
-        // when displaying uploaded doc/image in the view.
-        return 'uploads/documents';
+        return 'uploads/spreadsheets';
     }
 
     /**
@@ -158,4 +157,18 @@ class SpreadSheet
     {
         return $this->path;
     }
+
+    /**
+     *
+     */
+    public function upload()
+    {
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        $this->getFile()->move($this->getUploadRootDir(), $this->getFile()->getClientOriginalName());
+        $this->setPath($this->getFile()->getClientOriginalName());
+    }
+
 }

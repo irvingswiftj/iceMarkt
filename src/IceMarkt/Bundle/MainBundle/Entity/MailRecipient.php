@@ -59,7 +59,7 @@ class MailRecipient
     public function setEmailAddress($emailAddress)
     {
         if (!filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
-            throw new \Exception('invalid email address');
+            throw new \Exception(sprintf('invalid email address : %s', $emailAddress));
         }
 
         $this->emailAddress = $emailAddress;
