@@ -162,4 +162,37 @@ class EmailProfile
     }
 
 
+
+    /**
+     * Add templates
+     *
+     * @param \IceMarkt\Bundle\MainBundle\Entity\EmailTemplate $templates
+     * @return EmailProfile
+     */
+    public function addTemplate(\IceMarkt\Bundle\MainBundle\Entity\EmailTemplate $templates)
+    {
+        $this->templates[] = $templates;
+
+        return $this;
+    }
+
+    /**
+     * Remove templates
+     *
+     * @param \IceMarkt\Bundle\MainBundle\Entity\EmailTemplate $templates
+     */
+    public function removeTemplate(\IceMarkt\Bundle\MainBundle\Entity\EmailTemplate $templates)
+    {
+        $this->templates->removeElement($templates);
+    }
+
+    /**
+     * Get templates
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTemplates()
+    {
+        return $this->templates;
+    }
 }
