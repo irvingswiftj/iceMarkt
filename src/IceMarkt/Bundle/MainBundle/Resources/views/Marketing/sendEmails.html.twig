@@ -1,11 +1,23 @@
 {% extends '::base.html.twig' %}
 
-{% block title %}Mail Templates{% endblock %}
+{% block javascripts %}
+    {% javascripts '@IceMarktMainBundle/Resources/public/js/app.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        new IceMarkt().init($,{
+            'baseUrl': '{{ path('home_page') }}',
+            'batchSize': 10
+        });
+    </script>
+{% endblock %}
+
+{% block title %}IceMarkt | Market!{% endblock %}
 
 {% block body %}
     <h1>Send Emails</h1>
 
-    {{ form_start(sendEmailsForm) }}
+    {{ form_start(sendEmailsForm, {'attr': {'id': 'batchSend'}}) }}
 
     {{ form_errors(sendEmailsForm) }}
 
@@ -14,4 +26,19 @@
     </div>
 
     {{ form_end(sendEmailsForm) }}
+
+    <br/>
+    <br/>
+    <div id="batchSendSuccessLog" class="alert alert-success" style="display: none">
+        <h3>Sent</h3>
+        <ul id="batchSendSuccessLogList">
+
+        </ul>
+    </div>
+    <div id="batchSendErrorLog" class="alert alert-danger" style="display: none">
+        <h3>Failed</h3>
+        <ul id="batchSendErrorLogList">
+
+        </ul>
+    </div>
 {% endblock %}
