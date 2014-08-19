@@ -11,6 +11,8 @@ namespace IceMarkt\Bundle\MainBundle\Controller;
 use IceMarkt\Bundle\MainBundle\Entity\EmailProfile;
 use IceMarkt\Bundle\MainBundle\Entity\EmailTemplate;
 use IceMarkt\Bundle\MainBundle\Entity\EmailProfileRepository;
+use IceMarkt\Bundle\MainBundle\Entity\MailRecipient;
+use IceMarkt\Bundle\MainBundle\Facade\SendFacade;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -261,6 +263,49 @@ class EmailTemplateController extends Controller
     }
 
     /**
+     * Controller action for the content of a the test send modal box
+     *
+     * @Route("/emailTemplate/testSendForm/{id}",
+     *          name="view_email_template_test_send_form")
+     * @Template()
+     *
+     * @param Integer $id
+     *
+     * @return array
+     */
+    public function testSendFormAction($id)
+    {
+        //create for for test sends
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('view_email_template_test_send', array('id' => $id)))
+            ->setMethod('POST')
+            ->add('first_name', 'text', array(
+                'attr' => array(
+                    'class' => 'form-control'
+                )
+            ))
+            ->add('last_name', 'text', array(
+                'attr' => array(
+                    'class' => 'form-control'
+                )
+            ))
+            ->add('email', 'email', array(
+                'attr' => array(
+                    'class' => 'form-control',
+                )
+            ))
+            ->add('send', 'submit', array(
+                'attr'   =>  array(
+                    'class'   => 'btn btn-primary')
+            ))
+            ->getForm();
+
+        $this->varsForTwig['addMockRecipientForm'] = $form->createView();
+
+        return $this->varsForTwig;
+    }
+
+    /**
      * controller method for deleting an email template
      *
      * @Route(
@@ -291,7 +336,7 @@ class EmailTemplateController extends Controller
 
     /**
      * Controller Action for previewing a template
-     * //TODO handle invalid id
+     * TODO handle invalid id
      *
      * @Route("/emailTemplate/preview/{id}/",
      *          name="view_email_template_preview")
@@ -320,5 +365,44 @@ class EmailTemplateController extends Controller
         );
 
         return new Response($response);
+    }
+
+    /**
+     * Controller Action for sending a test email for a template
+     * TODO handle invalid id
+     *
+     * @Route("/emailTemplate/testSend/{id}/",
+     *          name="view_email_template_test_send")
+     *
+     * @param Integer $id - id of the template
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function testSendAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $template = $em->getRepository('IceMarktMainBundle:EmailTemplate')->findOneBy(
+            array(
+                'id' => $id
+            )
+        );
+
+        $formPostData = $request->request->get('form');
+
+        $mockRecipient = new MailRecipient();
+        $mockRecipient->setFirstName($formPostData['first_name']);
+        $mockRecipient->setLastName($formPostData['last_name']);
+        $mockRecipient->setEmailAddress($formPostData['email']);
+
+        $sendFacade = new SendFacade(
+            $em,
+            $this->get('mailer')
+        );
+
+        $sendFacade->sendTemplateToRecipient($id, $mockRecipient);
+
+        return $this->redirect($this->generateUrl('view_email_template_list'));
     }
 }

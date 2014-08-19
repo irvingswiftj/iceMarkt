@@ -21,14 +21,28 @@
                         <td>{{ emailTemplate.name}}</td>
                         <td>{{ emailTemplate.subject }}</td>
                         <td>
-                            <a href="{{ path('edit_template',{'id': emailTemplate.id}) }}">Edit</a> |
-                            <a href="{{ path('view_email_template_preview',{'id': emailTemplate.id}) }}" target="_blank">Preview</a> |
-                            <a href="{{ path('delete_template',{'id': emailTemplate.id}) }}">Delete</a>
+                            <a href="{{ path('edit_template', {'id': emailTemplate.id}) }}">Edit</a> |
+                            <a href="{{ path('view_email_template_preview', {'id': emailTemplate.id}) }}" target="_blank">Preview</a> |
+                            <a data-toggle="modal"
+                               data-target="#testSendModal"
+                               href="{{ path('view_email_template_test_send_form', {'id': emailTemplate.id})}}"
+                                    >Test Send
+                            </a> |
+                            <a href="{{ path('delete_template', {'id': emailTemplate.id}) }}">Delete</a>
                         </td>
                     </tr>
                     {%  endfor %}
                 </tbody>
             </table>
+
+            <!-- Modal -->
+            <div class="modal fade" id="testSendModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                    </div>
+                </div>
+            </div>
         </div>
     {% else %}
         <div class="alert alert-info">
