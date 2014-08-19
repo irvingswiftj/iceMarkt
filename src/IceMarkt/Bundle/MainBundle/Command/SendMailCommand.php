@@ -2,6 +2,7 @@
 
 namespace IceMarkt\Bundle\MainBundle\Command;
 
+use IceMarkt\Bundle\MainBundle\Entity\EmailTemplate;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -59,7 +60,7 @@ class SendMailCommand extends ContainerAwareCommand
                 ->setFrom($emailTemplate->getEmailProfile()->getFromEmail())
                 ->setTo($recipient->getEmailAddress())
                 ->setBody($body)
-                ->setContentType("text/html");
+                ->setContentType(EmailTemplate::$headers[$emailTemplate->getFormat()]);
 
             $this->getContainer()
                 ->get('mailer')

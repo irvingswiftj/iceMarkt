@@ -10,6 +10,7 @@ namespace IceMarkt\Bundle\MainBundle\Facade;
 
 
 use \Doctrine\ORM\EntityManager;
+use IceMarkt\Bundle\MainBundle\Entity\EmailTemplate;
 use IceMarkt\Bundle\MainBundle\Entity\MailRecipient;
 
 class SendFacade
@@ -52,7 +53,8 @@ class SendFacade
         $body = $twig->render(
             $emailTemplate->getTemplate(),
             array(
-                'first_name'  => $recipient->getFirstName()
+                'first_name' => $recipient->getFirstName(),
+                'last_name'  => $recipient->getLastName()
             )
         );
 
@@ -61,7 +63,7 @@ class SendFacade
             ->setFrom($emailTemplate->getEmailProfile()->getFromEmail())
             ->setTo($recipient->getEmailAddress())
             ->setBody($body)
-            ->setContentType("text/html");
+            ->setContentType(EmailTemplate::$headers[$emailTemplate->getFormat()]);
 
         $this->mailer->send($message);
 

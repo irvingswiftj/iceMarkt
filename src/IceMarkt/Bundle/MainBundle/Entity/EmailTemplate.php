@@ -20,6 +20,11 @@ class EmailTemplate
 
     const HTML_HEADER = 1;
 
+    static public $headers = array(
+        self::PLAIN_HEADER => 'text/plain',
+        self::HTML_HEADER => 'text/html'
+    );
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -45,7 +50,7 @@ class EmailTemplate
     /**
      * @ORM\Column(type="text")
      */
-    private $format;
+    private $format = self::HTML_HEADER;
 
     /**
      * @ORM\ManyToOne(targetEntity="IceMarkt\Bundle\MainBundle\Entity\EmailProfile", inversedBy="templates")
