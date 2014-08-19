@@ -19,6 +19,8 @@ var IceMarkt = function () {
 
         'lastOffset': 0,
 
+        'loading': false,
+
         /**
          * method to display the log section
          * @param logSectionId
@@ -81,6 +83,51 @@ var IceMarkt = function () {
         },
 
         /**
+         * Add loading state to element given
+         *
+         * @param element
+         *
+         * @return {void}
+         *
+         * @private
+         */
+        addLoadingState: function (element) {
+            module.$(element).button('loading');
+        },
+
+        /**
+         * Remove loading state to element given
+         *
+         * @param element
+         *
+         * @return {void}
+         *
+         * @private
+         */
+        removeLoadingState: function (element) {
+            module.$(element).button('reset');
+        },
+
+        /**
+         * Toggle the submit button from being in loading/non-loading states
+         *
+         * @return {void}
+         *
+         * @private
+         */
+        toggleLoadingState: function() {
+            var element = '#form_Send';
+
+            if (module.loading === true) {
+                module.removeLoadingState(element);
+            } else {
+                module.addLoadingState(element);
+            }
+
+            module.loading = !module.loading;
+        },
+
+        /**
          * method to handle successful ajax call
          *
          * @param data
@@ -96,6 +143,7 @@ var IceMarkt = function () {
                 module.sendBatch();
             } else {
                 module.lastOffset = 0;
+                module.toggleLoadingState();
             }
         },
 
@@ -121,6 +169,8 @@ var IceMarkt = function () {
         'onFormSubmitAction': function(event)
         {
             module.templateId = module.$('#form_email_template_id').val();
+
+            module.toggleLoadingState();
 
             module.sendBatch(module.config.batchSize);
 

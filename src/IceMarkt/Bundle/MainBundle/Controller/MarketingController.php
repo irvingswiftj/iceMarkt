@@ -54,7 +54,9 @@ class MarketingController extends Controller
             ))
             ->add('Send', 'submit', array(
                 'attr'   =>  array(
-                    'class'   => 'btn btn-primary')
+                    'class'   => 'btn btn-primary',
+                    'data-loading-text' => 'Loading...'
+                )
             ))
             ->getForm();
 
