@@ -27,16 +27,19 @@
 
     {{ form_end(sendEmailsForm) }}
 
+
     <br/>
-    <br/>
+    <div id="sendStatus" class="alert alert-info" style="display: none">
+        Sending Batch <span id="batchNumber">0</span> with <span id="batchQuantity">0</span> batch size
+    </div>
     <div id="batchSendSuccessLog" class="alert alert-success" style="display: none">
-        <h3>Sent</h3>
+        <strong>Sent</strong> <span id="batchesSent"></span>
         <ul id="batchSendSuccessLogList">
 
         </ul>
     </div>
     <div id="batchSendErrorLog" class="alert alert-danger" style="display: none">
-        <h3>Failed</h3>
+        <strong>Failed</strong>
         <ul id="batchSendErrorLogList">
 
         </ul>

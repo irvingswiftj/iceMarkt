@@ -34,6 +34,54 @@ var IceMarkt = function () {
         },
 
         /**
+         * Display the status update box
+         *
+         * @return {void}
+         *
+         * @private
+         */
+        'displayStatusUpdate': function () {
+            module.$('#sendStatus').slideDown();
+        },
+
+        /**
+         * Hide the status update box
+         *
+         * @return {void}
+         *
+         * @private
+         */
+        'hideStatusUpdate': function () {
+            module.$('#sendStatus').slideUp();
+        },
+
+        /**
+         * Update the status update
+         *
+         * @param {int} batchNumber
+         * @param {int} batchSize
+         *
+         * @return {void}
+         *
+         * @private
+         */
+        'updateStatusUpdate': function (batchNumber, batchSize) {
+            module.$('span#batchNumber').html(batchNumber);
+            module.$('span#batchQuantity').html(batchSize);
+        },
+
+        /**
+         * get the batch number that we are on
+         *
+         * @returns {number}
+         *
+         * @private
+         */
+        'getBatchCount': function () {
+            return (module.lastOffset + module.config.batchSize) / module.config.batchSize;
+        },
+
+        /**
          * method to log to our list
          * @param listId
          * @param content
@@ -120,7 +168,9 @@ var IceMarkt = function () {
 
             if (module.loading === true) {
                 module.removeLoadingState(element);
+                module.hideStatusUpdate();
             } else {
+                module.displayStatusUpdate();
                 module.addLoadingState(element);
             }
 
@@ -142,6 +192,7 @@ var IceMarkt = function () {
                 module.logToScreen(data.emailStatus);
                 module.sendBatch();
             } else {
+                module.$('#batchesSent').html((module.getBatchCount() - 1) + ' Batches');
                 module.lastOffset = 0;
                 module.toggleLoadingState();
             }
@@ -155,6 +206,7 @@ var IceMarkt = function () {
          * @private
          */
         'sendBatch': function () {
+            module.updateStatusUpdate(module.getBatchCount(), module.config.batchSize);
             module.$.ajax(module.getSendBatchUrl())
                 .done(module.sendBatchDoneAction);
         },
