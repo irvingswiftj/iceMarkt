@@ -22,7 +22,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 class RecipientController extends Controller
 {
-    private $varsForTwig = array();
+
+    const PAGE_SIZE = 10;
+
+    /**
+     * @var array
+     */
+    private $varsForTwig = array(
+        'pageSize' => self::PAGE_SIZE
+    );
 
     /**
      * controller method to the add recipient page
@@ -191,8 +199,20 @@ class RecipientController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        //TODO add support for pagination
-        $this->varsForTwig['recipients'] = $em->getRepository('IceMarktMainBundle:MailRecipient')->findAll();
+        //deducting 1 from the page number here as numbering starts from 1 and not 0
+        $offset = self::PAGE_SIZE * ($pageNumber-1);
+
+        $this->varsForTwig['recipients'] = $em->getRepository('IceMarktMainBundle:MailRecipient')->findAll(
+            null,
+            self::PAGE_SIZE,
+            $offset
+        );
+
+        $this->varsForTwig['totalPages'] = (
+            (int) ceil($em->getRepository('IceMarktMainBundle:MailRecipient')->fetchCount() / self::PAGE_SIZE)
+        );
+
+        $this->varsForTwig['currentPageNumber'] = (int) $pageNumber;
 
         return $this->varsForTwig;
     }

@@ -38,4 +38,24 @@ class MailRecipientRepository extends EntityRepository
             $offset
         );
     }
+
+    /**
+     * Method to get count of enabled rows in recipients table
+     *
+     * TODO: cache this result
+     *
+     * @return Integer
+     */
+    public function fetchCount()
+    {
+
+        $qb = $this->createQueryBuilder('id')
+        ->select('COUNT(id)')
+        ->where('id.enabled = :enabled')
+        ->setParameter('enabled', true);
+
+        $count = $qb->getQuery()->getSingleScalarResult();
+
+        return $count;
+    }
 }
