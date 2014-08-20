@@ -26,9 +26,16 @@ use Symfony\Component\HttpFoundation\Response;
 class EmailTemplateController extends Controller
 {
     /**
+     * amount of results per page
+     */
+    const PAGE_SIZE = 10;
+
+    /**
      * @var array
      */
-    private $varsForTwig = array();
+    private $varsForTwig = array(
+        'pageSize'  => self::PAGE_SIZE
+    );
 
 
     /**
@@ -256,8 +263,20 @@ class EmailTemplateController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        //TODO add support for pagination
-        $this->varsForTwig['emailTemplates'] = $em->getRepository('IceMarktMainBundle:EmailTemplate')->findAll();
+        //deducting 1 from the page number here as numbering starts from 1 and not 0
+        $offset = self::PAGE_SIZE * ($pageNumber-1);
+
+        $this->varsForTwig['emailTemplates'] = $em->getRepository('IceMarktMainBundle:EmailTemplate')->findAll(
+            null,
+            self::PAGE_SIZE,
+            $offset
+        );
+
+        $this->varsForTwig['totalPages'] = (
+        (int) ceil($em->getRepository('IceMarktMainBundle:EmailTemplate')->fetchCount() / self::PAGE_SIZE)
+        );
+
+        $this->varsForTwig['currentPageNumber'] = (int) $pageNumber;
 
         return $this->varsForTwig;
     }

@@ -15,6 +15,24 @@ class EmailTemplateRepository extends EntityRepository
 {
 
     /**
+     * Overriding the default find all so pagination is easier to implement
+     *
+     * @param array|null $orderBy
+     * @param Integer|null $limit
+     * @param Integer|null $offset
+     * @return array
+     */
+    public function findAll($orderBy = null, $limit = null, $offset = null)
+    {
+        return $this->findBy(
+            array(),
+            $orderBy,
+            $limit,
+            $offset
+        );
+    }
+
+    /**
      * Method to return an array suitable for being used as choices in a drop down
      *
      * @param array|null $orderBy
@@ -32,5 +50,23 @@ class EmailTemplateRepository extends EntityRepository
         }
 
         return $result;
+    }
+
+    /**
+     * Method to get count of enabled rows in email_templates table
+     *
+     * TODO: cache this result
+     *
+     * @return Integer
+     */
+    public function fetchCount()
+    {
+
+        $qb = $this->createQueryBuilder('id')
+            ->select('COUNT(id)');
+
+        $count = $qb->getQuery()->getSingleScalarResult();
+
+        return $count;
     }
 }
