@@ -58,7 +58,7 @@
     {% else %}
         {% if currentPageNumber > 1 %}
             <div class="alert alert-info">
-                <p>No results for this page number. Go back to <a href="{{ path('view_email_template_list') }}">first page </a></p>
+                <p>No results for this page number. Go back to <a class="alert-link" href="{{ path('view_email_template_list') }}">first page </a></p>
             </div>
         {% else %}
             <div class="alert alert-info">
