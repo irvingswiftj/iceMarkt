@@ -3,44 +3,12 @@
 {% block title %}Mail Recipients{% endblock %}
 
 {% block pagination %}
-    {% if totalPages > 1 %}
-        <ul class="pagination">
-            <li
-                    {% if currentPageNumber == 1 %}
-                class="disabled"
-                    {% endif %}>
-                <a
-                        {% if currentPageNumber > 1 %}
-                            href="{{ path('view_recipient_list_page', {'pageNumber': 1}) }}"
-                        {% endif %}
-                        >&laquo;
-                </a>
-            </li>
-            {% for pageNumber in (currentPageNumber-3)..(currentPageNumber+8) %}
-                {% if pageNumber > 0 and pageNumber <= totalPages %}
-                    <li
-                            {% if pageNumber == currentPageNumber %}
-                                class="active"
-                            {% endif %} >
-                        <a
-                                href="{{ path('view_recipient_list_page', {'pageNumber': pageNumber}) }}"
-                                >{{ pageNumber }}
-                        </a>
-                    </li>
-                {% endif %}
-            {% endfor %}
-            <li
-                    {% if currentPageNumber >= totalPages %}
-                        class="disabled"
-                    {% endif %}
-                    >
-                <a
-                        href="{{ path('view_recipient_list_page', {'pageNumber': totalPages}) }}"
-                        >&raquo;
-                </a>
-            </li>
-        </ul>
-    {% endif %}
+    {{ render(controller('IceMarktMainBundle:Common:Pagination', {
+    'totalPages': totalPages,
+    'currentPage': currentPageNumber,
+    'pageSize': pageSize,
+    'pageRouteName': 'view_recipient_list_page'
+    })) }}
 {% endblock %}
 
 {% block body %}
@@ -69,4 +37,5 @@
         </table>
     </div>
     {{ block('pagination') }}
+
 {% endblock %}

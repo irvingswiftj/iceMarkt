@@ -1,0 +1,38 @@
+{% if totalPages > 1 %}
+    <ul class="pagination">
+        <li
+                {% if currentPageNumber == 1 %}
+            class="disabled"
+                {% endif %}>
+            <a
+                    {% if currentPageNumber > 1 %}
+                        href="{{ path(pageRouteName, {'pageNumber': 1}) }}"
+                    {% endif %}
+                    >&laquo;
+            </a>
+        </li>
+        {% for pageNumber in (currentPageNumber-3)..(currentPageNumber+8) %}
+            {% if pageNumber > 0 and pageNumber <= totalPages %}
+                <li
+                        {% if pageNumber == currentPageNumber %}
+                            class="active"
+                        {% endif %} >
+                    <a
+                            href="{{ path(pageRouteName, {'pageNumber': pageNumber}) }}"
+                            >{{ pageNumber }}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        <li
+                {% if currentPageNumber >= totalPages %}
+                    class="disabled"
+                {% endif %}
+                >
+            <a
+                    href="{{ path(pageRouteName, {'pageNumber': totalPages}) }}"
+                    >&raquo;
+            </a>
+        </li>
+    </ul>
+{% endif %}
