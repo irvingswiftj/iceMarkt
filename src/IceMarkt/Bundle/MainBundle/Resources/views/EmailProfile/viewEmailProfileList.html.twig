@@ -2,10 +2,21 @@
 
 {% block title %}Mail Profiles{% endblock %}
 
+{% block pagination %}
+    {{ render(controller('IceMarktMainBundle:Common:Pagination', {
+    'totalPages': totalPages,
+    'currentPage': currentPageNumber,
+    'pageSize': pageSize,
+    'pageRouteName': 'view_email_profile_list_page'
+    })) }}
+{% endblock %}
+
 {% block body %}
     <h1>View Profiles</h1>
 
     {% if emailProfiles|length > 0 %}
+
+        {{ block('pagination') }}
         <div class="table-responsive">
             <table class="table table-striped table-hover table-condensed">
                 <thead>
@@ -31,12 +42,19 @@
                 </tbody>
             </table>
         </div>
+        {{ block('pagination') }}
     {% else %}
-        <div class="alert alert-info">
-            <p>You have no email profiles.</p><br>
-            <form action="{{ path('add_email_profile') }}">
-                <button class="btn btn-info">Add Email Profile</button>
-            </form>
-        </div>
+        {% if currentPageNumber > 1 %}
+            <div class="alert alert-info">
+                <p>No results for this page number. Go back to <a href="{{ path('view_email_profile_list') }}">first page </a></p>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <p>You have no email profiles.</p><br>
+                <form action="{{ path('add_email_profile') }}">
+                    <button class="btn btn-info">Add Email Profile</button>
+                </form>
+            </div>
+        {% endif %}
     {% endif %}
 {% endblock %}
