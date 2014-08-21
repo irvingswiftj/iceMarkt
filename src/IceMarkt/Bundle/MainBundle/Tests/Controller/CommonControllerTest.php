@@ -49,5 +49,4 @@ class CommonControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test', $result['pageRouteName']);
 
     }
-
 }
