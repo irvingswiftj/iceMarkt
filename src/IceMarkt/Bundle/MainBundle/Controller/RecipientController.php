@@ -115,6 +115,7 @@ class RecipientController extends Controller
      * @Template()
      *
      * @param Request $request
+     * @throws Exception if email address column can not be found
      * @return array
      */
     public function bulkAddRecipientAction(Request $request)
@@ -158,13 +159,68 @@ class RecipientController extends Controller
             $em->flush();
 
             if (($handle = fopen($spreadsheet->getWebPath(), "r")) !== false) {
+                $firstIteration     = true;
+                // the fields calculation i don't think should be in the controller, however for now
+                // this works as a proof of concept
+                $emailKey           = -1;
+                $firstNameKey       = -1;
+                $lastNameKey        = -1;
+                $nameKey            = -1;
+                $emailTitles        = array('email', 'email_address', 'email address', 'e-mail');
+                $firstNameTitles    = array('first name', 'fname', 'firstname');
+                $lastNameTitles     = array('last name', 'lname', 'lastname', 'surname');
+                $nameTitles         = array('name', 'fullname', 'full name');
                 while (($data = fgetcsv($handle, 0, ",")) !== false) {
-                    if (filter_var($data[0], FILTER_VALIDATE_EMAIL)) {
-                        $firstName = isset($data[1]) && strlen($data[1] > 0) ? $data[1] : 'na';
-                        $lastName = isset($data[2]) && strlen($data[2] > 0) ? $data[2] : 'na';
+                    //on first iteration, we should find out which column is what
+                    if ($firstIteration) {
+                        foreach ($data as $key => $value) {
+                            //check if value is an email or the title for the email column
+                            if (filter_var($value, FILTER_VALIDATE_EMAIL)
+                                || in_array(strtolower($value), $emailTitles)) {
+                                $emailKey = $key;
+                                //as we have the email address we know that we have done the first iteration
+                                $firstIteration = false;
+                            } elseif (in_array(strtolower($value), $firstNameTitles)) {
+                                $firstNameKey = $key;
+                            } elseif (in_array(strtolower($value), $lastNameTitles)) {
+                                $lastNameKey = $key;
+                            } elseif (in_array(strtolower($value), $nameTitles)) {
+                                $nameKey = $key;
+                            }
+                        }
+
+                        if ($firstNameKey === -1
+                            && $lastNameKey === -1
+                            && $nameKey === -1
+                        ) {
+                            //at this point, lets just assume the the csv is surname
+                            // and then first name after the email address
+                            $lastNameKey    = $emailKey + 1;
+                            $firstNameKey   = $emailKey + 2;
+                        }
+                    }
+
+                    if ($emailKey === -1) {
+                        // oh dear, we can't find the email address column!
+                        throw new Exception('No Valid email address column could be found');
+                    }
+
+                    //check that this row has a valid email address
+                    if (filter_var($data[$emailKey], FILTER_VALIDATE_EMAIL)) {
+                        if ($nameKey !== -1) {
+                            //name logic, it seems that we need to work out what is first name and what is last name
+                            $nameArray  = explode(" ", $data[$nameKey]);
+                            $lastName   = array_pop($nameArray);
+                            $firstName  = implode(" ", $nameArray);
+                        } else {
+                            $firstName = isset($data[$firstNameKey])
+                                ? $data[$firstNameKey] : 'na';
+                            $lastName = isset($data[$lastNameKey])
+                                ? $data[$lastNameKey] : 'na';
+                        }
 
                         $mailRecipient = new MailRecipient();
-                        $mailRecipient->setEmailAddress($data[0]);
+                        $mailRecipient->setEmailAddress($data[$emailKey]);
                         $mailRecipient->setFirstName($firstName);
                         $mailRecipient->setLastName($lastName);
                         $em->persist($mailRecipient);
