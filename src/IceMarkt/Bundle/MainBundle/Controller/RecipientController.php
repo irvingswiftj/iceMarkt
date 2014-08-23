@@ -166,28 +166,13 @@ class RecipientController extends Controller
                 $firstNameKey       = -1;
                 $lastNameKey        = -1;
                 $nameKey            = -1;
-                $emailTitles        = array('email', 'email_address', 'email address', 'e-mail');
-                $firstNameTitles    = array('first name', 'fname', 'firstname');
-                $lastNameTitles     = array('last name', 'lname', 'lastname', 'surname');
-                $nameTitles         = array('name', 'fullname', 'full name');
                 while (($data = fgetcsv($handle, 0, ",")) !== false) {
                     //on first iteration, we should find out which column is what
                     if ($firstIteration) {
-                        foreach ($data as $key => $value) {
-                            //check if value is an email or the title for the email column
-                            if (filter_var($value, FILTER_VALIDATE_EMAIL)
-                                || in_array(strtolower($value), $emailTitles)) {
-                                $emailKey = $key;
-                                //as we have the email address we know that we have done the first iteration
-                                $firstIteration = false;
-                            } elseif (in_array(strtolower($value), $firstNameTitles)) {
-                                $firstNameKey = $key;
-                            } elseif (in_array(strtolower($value), $lastNameTitles)) {
-                                $lastNameKey = $key;
-                            } elseif (in_array(strtolower($value), $nameTitles)) {
-                                $nameKey = $key;
-                            }
-                        }
+                        $emailKey       = $spreadsheet->getEmailColumnIndex($data);
+                        $firstNameKey   = $spreadsheet->getFirstNameColumnIndex($data);
+                        $lastNameKey    = $spreadsheet->getLastNameColumnIndex($data);
+                        $nameKey        = $spreadsheet->getNameColumnIndex($data);
 
                         if ($firstNameKey === -1
                             && $lastNameKey === -1
