@@ -93,6 +93,136 @@ class SpreadSheetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(-1, $spreadsheet->getEmailColumnIndex($testRow));
     }
 
+    /**
+     * @test
+     */
+    public function gettingFirstNameColumnIndexExpectedResult()
+    {
+        $spreadsheet = new SpreadSheet();
+        $testRow = array(
+            0 => 'blah',
+            1 => 'blah',
+            2 => 'First Name',
+            3 => 'blah'
+        );
+
+        $this->assertEquals(2, $spreadsheet->getFirstNameColumnIndex($testRow));
+    }
+
+    /**
+     * @test
+     */
+    public function gettingFirstNameColumnIndexWithNoResult()
+    {
+        $spreadsheet = new SpreadSheet();
+        $testRow = array(
+            0 => 'blah',
+            1 => 'blah',
+            2 => 'blah',
+            3 => 'blah'
+        );
+
+        $this->assertEquals(-1, $spreadsheet->getFirstNameColumnIndex($testRow));
+    }
+
+    /**
+     * @test
+     */
+    public function gettingFirstNameColumnIndexEmptyRow()
+    {
+        $spreadsheet = new SpreadSheet();
+        $testRow = array();
+
+        $this->assertEquals(-1, $spreadsheet->getFirstNameColumnIndex($testRow));
+    }
+
+
+    /**
+     * @test
+     */
+    public function gettingLastNameColumnIndexExpectedResult()
+    {
+        $spreadsheet = new SpreadSheet();
+        $testRow = array(
+            0 => 'blah',
+            1 => 'blah',
+            2 => 'Last Name',
+            3 => 'blah'
+        );
+
+        $this->assertEquals(2, $spreadsheet->getLastNameColumnIndex($testRow));
+    }
+
+    /**
+     * @test
+     */
+    public function gettingLastNameColumnIndexWithNoResult()
+    {
+        $spreadsheet = new SpreadSheet();
+        $testRow = array(
+            0 => 'blah',
+            1 => 'blah',
+            2 => 'blah',
+            3 => 'blah'
+        );
+
+        $this->assertEquals(-1, $spreadsheet->getLastNameColumnIndex($testRow));
+    }
+
+    /**
+     * @test
+     */
+    public function gettingLastNameColumnIndexEmptyRow()
+    {
+        $spreadsheet = new SpreadSheet();
+        $testRow = array();
+
+        $this->assertEquals(-1, $spreadsheet->getLastNameColumnIndex($testRow));
+    }
+
+    /**
+     * @test
+     */
+    public function gettingNameColumnIndexExpectedResult()
+    {
+        $spreadsheet = new SpreadSheet();
+        $testRow = array(
+            0 => 'blah',
+            1 => 'blah',
+            2 => 'Full Name',
+            3 => 'blah'
+        );
+
+        $this->assertEquals(2, $spreadsheet->getNameColumnIndex($testRow));
+    }
+
+    /**
+     * @test
+     */
+    public function gettingNameColumnIndexWithNoResult()
+    {
+        $spreadsheet = new SpreadSheet();
+        $testRow = array(
+            0 => 'blah',
+            1 => 'blah',
+            2 => 'blah',
+            3 => 'blah'
+        );
+
+        $this->assertEquals(-1, $spreadsheet->getNameColumnIndex($testRow));
+    }
+
+    /**
+     * @test
+     */
+    public function gettingNameColumnIndexEmptyRow()
+    {
+        $spreadsheet = new SpreadSheet();
+        $testRow = array();
+
+        $this->assertEquals(-1, $spreadsheet->getNameColumnIndex($testRow));
+    }
+
 
     /**
      * @test
