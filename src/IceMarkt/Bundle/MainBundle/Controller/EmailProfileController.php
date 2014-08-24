@@ -203,7 +203,7 @@ class EmailProfileController extends Controller
                     'value' => empty($profile) ? $emailProfile->getReplyToEmail() : $profile['replyToEmail']
                 )
             ))
-            ->add('Add', 'submit', array(
+            ->add('Edit', 'submit', array(
                 'attr'   =>  array(
                     'class'   => 'btn btn-primary')
             ))
