@@ -11,6 +11,12 @@ N.B. This is still very much a work in progress, the more contributors the bette
 * Vagrant
 * VirtualBox
 
+## Without using the virtual machine
+* PHP
+* Composer
+* A database (only tested with MySQL so far, but will test with PostGres soon)
+* Apache/Nginx
+
 #Setup
 
 Add this entry to your hosts file (/etc/hosts on unix based machines):
@@ -48,6 +54,9 @@ Unit tests are limited but they are all passing
 
 As I'm currently using NFS to map a shared folder to the virtual machine, it won't work out of the box with windows
 
+#TODOS
+- Controllers need to be using dependency injection so that they can have better unit tests (am currently working on this)
+- Bulk uploading of recipients needs to use PHPExcel as it currently only supports csv files.
 
 #Credits
 - [irvingswiftj](https://github.com/:irvingswiftj)
