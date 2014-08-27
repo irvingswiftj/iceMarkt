@@ -17,7 +17,9 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new IceMarkt\Bundle\MainBundle\IceMarktMainBundle(),
-            new IceMarkt\Bundle\PublicBundle\IceMarktPublicBundle()
+            new IceMarkt\Bundle\PublicBundle\IceMarktPublicBundle(),
+            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
+            new JMS\AopBundle\JMSAopBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -9,6 +9,7 @@
 namespace IceMarkt\Bundle\MainBundle\Controller;
 
 
+use JMS\DiExtraBundle\Annotation as DI;
 use IceMarkt\Bundle\MainBundle\Entity\MailRecipient;
 use IceMarkt\Bundle\MainBundle\Entity\SpreadSheet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,6 +25,11 @@ class RecipientController extends Controller
 {
 
     const PAGE_SIZE = 10;
+
+    /**
+     * @DI\Inject("doctrine.orm.entity_manager")
+     */
+    private $entityManager;
 
     /**
      * @var array
@@ -44,6 +50,7 @@ class RecipientController extends Controller
      */
     public function addRecipientAction(Request $request)
     {
+
         $this->varsForTwig['emailAdded'] = false;
 
         $recipient = $request->request->get('form');
@@ -82,9 +89,10 @@ class RecipientController extends Controller
 
         if ($form->isValid()) {
 
-            $em = $this->getDoctrine()->getManager();
-
-            $existingRecipient = $em->getRepository('IceMarktMainBundle:MailRecipient')->find($recipient['email']);
+            $existingRecipient = $this
+                ->entityManager
+                ->getRepository('IceMarktMainBundle:MailRecipient')
+                ->find($recipient['email']);
 
             if ($existingRecipient === null) {
 
@@ -93,8 +101,8 @@ class RecipientController extends Controller
                 $newRecipient->setLastName($recipient['last_name']);
                 $newRecipient->setEmailAddress($recipient['email']);
 
-                $em->persist($newRecipient);
-                $em->flush();
+                $this->entityManager->persist($newRecipient);
+                $this->entityManager->flush();
 
                 $this->varsForTwig['emailAdded'] = $recipient['email'];
 
@@ -115,7 +123,7 @@ class RecipientController extends Controller
      * @Template()
      *
      * @param Request $request
-     * @throws Exception if email address column can not be found
+     * @throws \Exception if email address column can not be found
      * @return array
      */
     public function bulkAddRecipientAction(Request $request)
@@ -151,12 +159,10 @@ class RecipientController extends Controller
 
         if ($form->isValid()) {
 
-            $em = $this->getDoctrine()->getManager();
-
             $spreadsheet->upload();
 
-            $em->persist($spreadsheet);
-            $em->flush();
+            $this->entityManager->persist($spreadsheet);
+            $this->entityManager->flush();
 
             if (($handle = fopen($spreadsheet->getWebPath(), "r")) !== false) {
                 $firstIteration     = true;
@@ -187,7 +193,7 @@ class RecipientController extends Controller
 
                     if ($emailKey === -1) {
                         // oh dear, we can't find the email address column!
-                        throw new Exception('No Valid email address column could be found');
+                        throw new \Exception('No Valid email address column could be found');
                     }
 
                     //check that this row has a valid email address
@@ -208,11 +214,11 @@ class RecipientController extends Controller
                         $mailRecipient->setEmailAddress($data[$emailKey]);
                         $mailRecipient->setFirstName($firstName);
                         $mailRecipient->setLastName($lastName);
-                        $em->persist($mailRecipient);
+                        $this->entityManager->persist($mailRecipient);
                     }
                 }
                 fclose($handle);
-                $em->flush();
+                $this->entityManager->flush();
             }
 
         }
@@ -238,19 +244,23 @@ class RecipientController extends Controller
      */
     public function viewRecipientListAction($pageNumber = 1)
     {
-        $em = $this->getDoctrine()->getManager();
 
         //deducting 1 from the page number here as numbering starts from 1 and not 0
         $offset = self::PAGE_SIZE * ($pageNumber-1);
 
-        $this->varsForTwig['recipients'] = $em->getRepository('IceMarktMainBundle:MailRecipient')->findAll(
-            null,
-            self::PAGE_SIZE,
-            $offset
-        );
+        $this->varsForTwig['recipients'] = $this
+            ->entityManager
+            ->getRepository('IceMarktMainBundle:MailRecipient')
+            ->findAll(
+                null,
+                self::PAGE_SIZE,
+                $offset
+            );
 
         $this->varsForTwig['totalPages'] = (
-            (int) ceil($em->getRepository('IceMarktMainBundle:MailRecipient')->fetchCount() / self::PAGE_SIZE)
+            (int) ceil(
+                $this->entityManager->getRepository('IceMarktMainBundle:MailRecipient')->fetchCount() / self::PAGE_SIZE
+            )
         );
 
         $this->varsForTwig['currentPageNumber'] = (int) $pageNumber;
@@ -272,15 +282,14 @@ class RecipientController extends Controller
      */
     public function removeRecipientAction($email)
     {
-        $em = $this->getDoctrine()->getManager();
-        $recipient = $em->getRepository('IceMarktMainBundle:MailRecipient')->findOneBy(
+        $recipient = $this->entityManager->getRepository('IceMarktMainBundle:MailRecipient')->findOneBy(
             array(
                 'emailAddress' => $email
             )
         );
 
         $recipient->disable();
-        $em->flush();
+        $this->entityManager->flush();
 
         $this->varsForTwig['email'] = $email;
 
