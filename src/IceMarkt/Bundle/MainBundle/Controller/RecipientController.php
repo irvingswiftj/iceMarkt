@@ -14,6 +14,7 @@ use IceMarkt\Bundle\MainBundle\Entity\MailRecipient;
 use IceMarkt\Bundle\MainBundle\Entity\SpreadSheet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -37,6 +38,20 @@ class RecipientController extends Controller
     private $varsForTwig = array(
         'pageSize' => self::PAGE_SIZE
     );
+
+    /**
+     * setter for entity manager
+     *
+     * @param  $entityManager
+     *
+     * @return $this
+     */
+    public function setEntityManager(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+
+        return $this;
+    }
 
     /**
      * controller method to the add recipient page
