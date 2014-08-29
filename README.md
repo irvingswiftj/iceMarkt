@@ -48,7 +48,7 @@ Hopefully it rendered a page!
 
 #Testing
 
-Unit tests are limited but they are all passing
+All unit tests pass. The code coverage for the unit tests needs increasing though, hence the TODO of controllers to use dependency injection.
 
 #Known Issues
 
