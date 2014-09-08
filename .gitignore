@@ -1,7 +1,11 @@
 vender/
 composer.lock
 .vagrant/
-var/
+var/cache/test
+var/cache/dev
+var/logs/dev.log
+var/logs/test.log
+var/bootstrap.php.cache
 web/uploads
 puppet/files/dot
 app/config/parameters.yml
