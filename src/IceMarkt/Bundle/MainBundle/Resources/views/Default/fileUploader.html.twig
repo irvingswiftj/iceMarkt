@@ -1,0 +1,34 @@
+<html>
+<head>
+    <title>IceMarkt</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    {% include '::header.html.twig' %}
+    <div class="container">
+
+        <div class="alert alert-info" role="alert">
+            Currently only supported CSVs (as it was quick and easy to implement!)<br/>
+                Implementing support for Excel Files is in the TODO list!
+        </div>
+
+        {{ form_start(spreadsheetUploadForm) }}
+
+            {{ form_errors(spreadsheetUploadForm) }}
+
+            <div class="form-group">
+                {{ form_row(spreadsheetUploadForm.spreadsheet) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(spreadsheetUploadForm.Upload) }}
+            </div>
+
+        {{ form_end(spreadsheetUploadForm) }}
+
+    </div><!-- /.container -->
+
+</body>
+
+{% include '::footer.html.twig' %}
+</html>

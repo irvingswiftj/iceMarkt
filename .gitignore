@@ -1,6 +1,5 @@
 vender/
 composer.lock
-default/
 .vagrant/
 var/
 web/uploads
