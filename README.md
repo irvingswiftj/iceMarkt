@@ -41,6 +41,8 @@ composer install
 chmod a+x setupdb.sh
 ./setupdb.sh
 ```
+N.B. if you get the invalid permission error when trying to run setupdb.sh, sudo it like:
+`sudo ./setupdb.sh`
 
 Open your browser and go to: icemarkt.dev
 
