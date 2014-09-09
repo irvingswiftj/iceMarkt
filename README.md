@@ -19,6 +19,16 @@ N.B. This is still very much a work in progress, the more contributors the bette
 
 #Setup
 
+##Mac OSX
+
+Open the project folder in finder and double click on setupIceMarktOSX.command
+
+When it says `[Process Completed]` you can close the window
+
+Open you browser and goto: icemarkt.dev
+
+##Linux
+
 Add this entry to your hosts file (/etc/hosts on unix based machines):
 
 `192.168.56.101  icemarkt.dev`
