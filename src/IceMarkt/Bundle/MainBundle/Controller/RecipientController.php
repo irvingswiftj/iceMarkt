@@ -174,6 +174,9 @@ class RecipientController extends Controller
 
         if ($form->isValid()) {
 
+            //this resolves line ending issues that I have incurred
+            ini_set('auto_detect_line_endings', '1');
+
             $spreadsheet->upload();
 
             $this->entityManager->persist($spreadsheet);
