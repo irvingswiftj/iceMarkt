@@ -230,15 +230,19 @@ class RecipientController extends Controller
                                 ? $data[$lastNameKey] : 'na';
                         }
 
-                        $mailRecipient = new MailRecipient();
-                        $mailRecipient->setEmailAddress($data[$emailKey]);
-                        $mailRecipient->setFirstName($firstName);
-                        $mailRecipient->setLastName($lastName);
-                        $this->entityManager->persist($mailRecipient);
+                        try {
+                            $mailRecipient = new MailRecipient();
+                            $mailRecipient->setEmailAddress($data[$emailKey]);
+                            $mailRecipient->setFirstName($firstName);
+                            $mailRecipient->setLastName($lastName);
+                            $this->entityManager->persist($mailRecipient);
+                            $this->entityManager->flush();
+                        } catch (\Exception $e) {
+                            //TODO handle when mailrecipient cant be added: probably already exists!
+                        }
                     }
                 }
                 fclose($handle);
-                $this->entityManager->flush();
             }
 
         }
