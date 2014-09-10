@@ -207,6 +207,8 @@ class RecipientController extends Controller
                             $lastNameKey    = $emailKey + 1;
                             $firstNameKey   = $emailKey + 2;
                         }
+
+                        $firstIteration = false;
                     }
 
                     if ($emailKey === -1) {
